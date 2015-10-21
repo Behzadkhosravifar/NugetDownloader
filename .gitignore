@@ -15,7 +15,6 @@ build/
 [Bb]in/
 [Oo]bj/
 [Oo]ut/
-[Nn]uGetPackages/
 
 
 # Disable "build/" folder in the NuGet Packages folder since NuGet packages use it for MSBuild targets
