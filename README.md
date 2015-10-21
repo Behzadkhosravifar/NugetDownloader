@@ -1,4 +1,4 @@
-# NugetDownloader
+# Nuget Downloader
 
 [![Build status](https://ci.appveyor.com/api/projects/status/hd8fgl8ejh9sumo5?svg=true)](https://ci.appveyor.com/project/Behzadkhosravifar/nugetdownloader)
 

@@ -22,7 +22,8 @@ bld/
 [Bb]in/
 [Oo]bj/
 
-# Visual Studo 2015 cache/options directory
+
+# Visual Studio 2015 cache/options directory
 .vs/
 
 # MSTest test Results
@@ -36,6 +37,7 @@ TestResult.xml
 # Build Results of an ATL Project
 [Dd]ebugPS/
 [Rr]eleasePS/
+[Oo]ut/
 dlldata.c
 
 *_i.c
