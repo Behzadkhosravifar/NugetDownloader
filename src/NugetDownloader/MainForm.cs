@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
+using System.IO;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,49 +13,50 @@ namespace NugetDownloader
 {
     public partial class MainForm : Form
     {
-        private Random rand = new Random();
+        private readonly Random _rand = new Random();
         int _limitPercent; //1%
-        private int counter = 0;
-        WebClient webClient;               // Our WebClient that will be doing the downloading for us
-        Stopwatch sw = new Stopwatch();    // The stopwatch which we will be using to calculate the download speed
-        private static CancellationTokenSource CTS;
+        private int _counter;
+        WebClient _webClient;               // Our WebClient that will be doing the downloading for us
+        readonly Stopwatch _sw = new Stopwatch();    // The stopwatch which we will be using to calculate the download speed
+        private static CancellationTokenSource _cts;
 
         public MainForm()
         {
             InitializeComponent();
 
-            CTS = new CancellationTokenSource();
+            _cts = new CancellationTokenSource();
         }
 
 
 
         private async void btnStartDownload_Click(object sender, EventArgs e)
         {
-            if(CTS.IsCancellationRequested) CTS = new CancellationTokenSource();
+            if (_cts.IsCancellationRequested) _cts = new CancellationTokenSource();
+            var temp = Path.GetTempFileName();
 
-            var delay = rand.Next((int)numMinSleepTime.Value, (int)numMaxSleepTime.Value);
+            var delay = _rand.Next((int)numMinSleepTime.Value, (int)numMaxSleepTime.Value);
 
-            await SeedDelay(delay, CTS);
+            await SeedDelay(delay, _cts);
 
-            _limitPercent = rand.Next((int)numMinLimit.Value, (int)numMaxLimit.Value);
-            lblLimitPercent.Text = string.Format(@"/ {0}%", _limitPercent);
+            _limitPercent = _rand.Next((int)numMinLimit.Value, (int)numMaxLimit.Value);
+            lblLimitPercent.Text = $@"/ {_limitPercent}%";
 
 
-            using (webClient = new WebClient())
+            using (_webClient = new WebClient())
             {
-                webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
-                webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(ProgressChanged);
+                _webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
+                _webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(ProgressChanged);
 
                 // The variable that will be holding the url address (making sure it starts with http://)
-                Uri URL = new Uri(textBox1.Text);
+                var url = new Uri(textBox1.Text);
 
                 // Start the stopwatch which we will be using to calculate the download speed
-                sw.Restart();
+                _sw.Restart();
 
                 try
                 {
                     // Start downloading the file
-                    webClient.DownloadFileAsync(URL, @"D:\nuget.test");
+                    _webClient.DownloadFileAsync(url, temp);
                 }
                 catch (Exception ex)
                 {
@@ -67,7 +64,7 @@ namespace NugetDownloader
                 }
             }
 
-            lblCounter.Text = (++counter).ToString();
+            lblCounter.Text = (++_counter).ToString();
         }
 
 
@@ -75,7 +72,7 @@ namespace NugetDownloader
         private void ProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             // Calculate download speed and output it to labelSpeed.
-            labelSpeed.Text = string.Format("{0} kb/s", (e.BytesReceived / 1024d / sw.Elapsed.TotalSeconds).ToString("0.00"));
+            labelSpeed.Text = $"{(e.BytesReceived / 1024d / _sw.Elapsed.TotalSeconds).ToString("0.00")} kb/s";
 
             // Update the progressbar percentage only when the value is not the same.
             progressBar.Value = e.ProgressPercentage;
@@ -84,13 +81,12 @@ namespace NugetDownloader
             labelPerc.Text = e.ProgressPercentage + "%";
 
             // Update the label with how much data have been downloaded so far and the total size of the file we are currently downloading
-            labelDownloaded.Text = string.Format("{0} MB's / {1} MB's",
-                (e.BytesReceived / 1024d / 1024d).ToString("0.00"),
-                (e.TotalBytesToReceive / 1024d / 1024d).ToString("0.00"));
+            labelDownloaded.Text =
+                $"{(e.BytesReceived / 1024d / 1024d).ToString("0.00")} MB's / {(e.TotalBytesToReceive / 1024d / 1024d).ToString("0.00")} MB's";
 
             if (_limitPercent <= e.ProgressPercentage)
             {
-                webClient.CancelAsync();
+                _webClient.CancelAsync();
             }
         }
 
@@ -113,13 +109,13 @@ namespace NugetDownloader
         private void Completed(object sender, AsyncCompletedEventArgs e)
         {
             // Reset the stopwatch.
-            sw.Reset();
+            _sw.Reset();
 
 
             lblStatus.Text = e.Cancelled ? "Download has been canceled." : "Download completed!";
 
 
-            if (!CTS.IsCancellationRequested)
+            if (!_cts.IsCancellationRequested)
             {
                 btnStartDownload_Click(sender, e);
             }
@@ -129,8 +125,8 @@ namespace NugetDownloader
         {
             try
             {
-                CTS.Cancel();
-                webClient.CancelAsync();
+                _cts.Cancel();
+                _webClient.CancelAsync();
             }
             catch (Exception)
             {
