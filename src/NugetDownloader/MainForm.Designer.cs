@@ -29,16 +29,15 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtUrl = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnStartDownload = new System.Windows.Forms.Button();
+            this.btnStartStop = new System.Windows.Forms.Button();
             this.lblCounter = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.labelSpeed = new System.Windows.Forms.Label();
             this.labelDownloaded = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.labelPerc = new System.Windows.Forms.Label();
-            this.btnStop = new System.Windows.Forms.Button();
             this.lblStatus = new System.Windows.Forms.Label();
             this.lblLimitPercent = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -57,14 +56,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.numMaxSleepTime)).BeginInit();
             this.SuspendLayout();
             // 
-            // textBox1
+            // txtUrl
             // 
-            this.textBox1.Location = new System.Drawing.Point(80, 18);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(371, 20);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.Text = "\r\nhttps://www.nuget.org/api/v2/package/PackageID/PackageVersion";
-            this.toolTip.SetToolTip(this.textBox1, "Sample: https://www.nuget.org/api/v2/package/NugetDownloader/2.1.3");
+            this.txtUrl.Location = new System.Drawing.Point(80, 18);
+            this.txtUrl.Name = "txtUrl";
+            this.txtUrl.Size = new System.Drawing.Size(371, 20);
+            this.txtUrl.TabIndex = 0;
+            this.txtUrl.Text = "\r\nhttps://www.nuget.org/api/v2/package/PackageID/PackageVersion";
+            this.toolTip.SetToolTip(this.txtUrl, "Sample: https://www.nuget.org/api/v2/package/NugetDownloader/2.1.3");
             // 
             // label1
             // 
@@ -75,15 +74,16 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Nuget Link:";
             // 
-            // btnStartDownload
+            // btnStartStop
             // 
-            this.btnStartDownload.Location = new System.Drawing.Point(15, 130);
-            this.btnStartDownload.Name = "btnStartDownload";
-            this.btnStartDownload.Size = new System.Drawing.Size(91, 32);
-            this.btnStartDownload.TabIndex = 2;
-            this.btnStartDownload.Text = "&Start Download";
-            this.btnStartDownload.UseVisualStyleBackColor = true;
-            this.btnStartDownload.Click += new System.EventHandler(this.btnStartDownload_Click);
+            this.btnStartStop.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnStartStop.Location = new System.Drawing.Point(15, 130);
+            this.btnStartStop.Name = "btnStartStop";
+            this.btnStartStop.Size = new System.Drawing.Size(165, 32);
+            this.btnStartStop.TabIndex = 2;
+            this.btnStartStop.Text = "Start";
+            this.btnStartStop.UseVisualStyleBackColor = true;
+            this.btnStartStop.Click += new System.EventHandler(this.btnStartDownload_Click);
             // 
             // lblCounter
             // 
@@ -139,23 +139,13 @@
             this.labelPerc.TabIndex = 8;
             this.labelPerc.Text = "0 %";
             // 
-            // btnStop
-            // 
-            this.btnStop.Location = new System.Drawing.Point(112, 130);
-            this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(91, 32);
-            this.btnStop.TabIndex = 2;
-            this.btnStop.Text = "Stop";
-            this.btnStop.UseVisualStyleBackColor = true;
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
-            // 
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Font = new System.Drawing.Font("Minisystem", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStatus.Location = new System.Drawing.Point(12, 260);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(98, 21);
+            this.lblStatus.Size = new System.Drawing.Size(85, 25);
             this.lblStatus.TabIndex = 9;
             this.lblStatus.Text = "Status: ";
             this.toolTip.SetToolTip(this.lblStatus, "Download state");
@@ -174,9 +164,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(20, 186);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(54, 13);
+            this.label3.Size = new System.Drawing.Size(78, 13);
             this.label3.TabIndex = 12;
-            this.label3.Text = "Min Limit :";
+            this.label3.Text = "Min Download:";
             // 
             // label4
             // 
@@ -199,11 +189,10 @@
             this.numMinSleepTime.Size = new System.Drawing.Size(62, 20);
             this.numMinSleepTime.TabIndex = 13;
             this.toolTip.SetToolTip(this.numMinSleepTime, "Minimum random sleep time between every download");
-            this.numMinSleepTime.ValueChanged += new System.EventHandler(this.numMinSleepTime_ValueChanged);
             // 
             // numMinLimit
             // 
-            this.numMinLimit.Location = new System.Drawing.Point(80, 184);
+            this.numMinLimit.Location = new System.Drawing.Point(112, 184);
             this.numMinLimit.Minimum = new decimal(new int[] {
             1,
             0,
@@ -218,7 +207,6 @@
             0,
             0,
             0});
-            this.numMinLimit.ValueChanged += new System.EventHandler(this.numMinLimit_ValueChanged);
             // 
             // numMaxLimit
             // 
@@ -237,16 +225,15 @@
             0,
             0,
             0});
-            this.numMaxLimit.ValueChanged += new System.EventHandler(this.numMaxLimit_ValueChanged);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(326, 186);
+            this.label5.Location = new System.Drawing.Point(294, 186);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(57, 13);
+            this.label5.Size = new System.Drawing.Size(81, 13);
             this.label5.TabIndex = 15;
-            this.label5.Text = "Max Limit :";
+            this.label5.Text = "Max Download:";
             // 
             // numMaxSleepTime
             // 
@@ -260,7 +247,6 @@
             this.numMaxSleepTime.Size = new System.Drawing.Size(62, 20);
             this.numMaxSleepTime.TabIndex = 17;
             this.toolTip.SetToolTip(this.numMaxSleepTime, "Maximum random sleep time between every download");
-            this.numMaxSleepTime.ValueChanged += new System.EventHandler(this.numMaxSleepTime_ValueChanged);
             // 
             // label6
             // 
@@ -311,10 +297,9 @@
             this.Controls.Add(this.labelSpeed);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.lblCounter);
-            this.Controls.Add(this.btnStop);
-            this.Controls.Add(this.btnStartDownload);
+            this.Controls.Add(this.btnStartStop);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtUrl);
             this.Name = "MainForm";
             this.Text = "Nuget Downloader";
             ((System.ComponentModel.ISupportInitialize)(this.numMinSleepTime)).EndInit();
@@ -328,16 +313,15 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtUrl;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnStartDownload;
+        private System.Windows.Forms.Button btnStartStop;
         private System.Windows.Forms.Label lblCounter;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelSpeed;
         private System.Windows.Forms.Label labelDownloaded;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label labelPerc;
-        private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Label lblLimitPercent;
         private System.Windows.Forms.Label label3;
